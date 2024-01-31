@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Змейка</title>
+    </head>
+    <body>
+         <canvas id="canvas" width="1024" height="1024"></canvas>
+         <script>
+            var game = {
+                tickNumber: 0,
+                timer: null,
+                score: 0,
+                board: [
+                    "###############",
+                    "#             #",
+                    "#             #",
+                    "#             #",
+                    "#     ####    #",
+                    "#     ####    #",
+                    "#             #",
+                    "#             #",
+                    "#             #",
+                    "###############"
+                ],
+                fruit:  [
+                    {x: 1, y: 1}
+                ],
+                tick: function() {
+                      window.clearTimeout(game.timer);
+                      game.tickNumber++;
+                      if(game.tickNumber % 10 == 0)  {
+                        game.addRandomFruit();
+                      }
+                      var result = shake.move();
+                      if(result =="gameover") {
+                         alert("Не повезло! Очков:" + game.score);
+                         return;
+                      }
+                      graphics.drawGame();
+                      game.timer = window.setTimeout("game.tick()", 500);
+                },
+                addRandomFruit: function() {
+                      var randomY = Math.floor(Math.random() * game.board.length) + 0
+                      var randomX = Math.floor(Math.random() * game.board[randomY].length) + 0;
+                      var randomLocation = {x: randomX, y: randomY};
+                      if(game.isEmpty(randomLocation)  && !game.isFruit(randomLocation)) {
+                        game.fruit.push(randomLocation);
+                      }
+                },
+
+                isEmpty: function(location) {
+                    return game.board[location.y][location.x] == ' ';
+
+                },
+                isWall: function(location) {
+                    return game.board[location.y][location.x] == '#';
+                },
+                isFruit: function(location) {
+                    for(var fruitNumber = 0; fruitNumber < game.fruit.length; fruitNumber++){
+                        var fruit = game.fruit[fruitNumber];
+                        if(location.x == fruit.x && location.y == fruit.y) {
+                            game.fruit.splice(fruitNumber, 1);
+                            return true
+                        }
+                    }
+                    return false
+                },
+                isShake: function(location) {
+                    for(var snakePart = 0; snakePart < snake.parts.length; snakePart++){
+                        var part = snake.parts[snakePart];
+                        if(location.x == part.x && location.y == part.y) {
+                            return true
+                        }
+                    }
+                    return false
+                }
+            };
+            var shake = {
+                parts: [
+                    {x: 4,y: 2},
+                    {x: 3,y: 2},
+                    {x: 2,y: 2}
+                ],
+                facing: "E",
+            }
+         </script>
+    </body>
+</html>
